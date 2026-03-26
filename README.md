@@ -1,128 +1,119 @@
-# 🚀 aws-devops-ci-cd-pipeline
+# 🚀 AWS DevOps CI/CD Pipeline
 
 This project demonstrates a production-style DevOps pipeline using AWS, Terraform, Docker, and GitHub Actions.
 
----
-
-## 📌 Overview
-
-This system automates infrastructure provisioning and application deployment using CI/CD.
-
-Every code push triggers an automated pipeline that:
-
-- Connects to EC2
-- Pulls latest code
-- Builds Docker image
-- Deploys updated application
+It automates infrastructure provisioning and application deployment using CI/CD principles.
 
 ---
 
-## 🏗️ Architecture
+## 🧩 Architecture
 
-User → Application Load Balancer → EC2 Instances → Docker Containers
-
-CI/CD Flow:
-GitHub Push → GitHub Actions → SSH → EC2 → Docker Deploy
+```
+Developer → GitHub → GitHub Actions → EC2 → Docker → Application
+                          ↓
+                       AWS ALB
+```
 
 ---
 
 ## ⚙️ Tech Stack
 
-- **Cloud:** AWS (EC2, ALB, VPC)
-- **IaC:** Terraform
-- **Containerization:** Docker
-- **CI/CD:** GitHub Actions
-- **Version Control:** GitHub
+* **Cloud** : AWS (EC2, ALB, VPC)
+* **Infrastructure as Code** : Terraform
+* **Containerization** : Docker
+* **CI/CD** : GitHub Actions
+* **Web Server** : Apache (httpd)
 
 ---
 
 ## 🚀 Features
 
-- Infrastructure provisioning using Terraform
-- Multi-tier architecture with VPC and subnets
-- Dockerized application deployment
-- Automated CI/CD pipeline using GitHub Actions
-- SSH-based deployment to EC2
-- Canary-style deployment architecture (ALB)
+* Infrastructure provisioning using Terraform
+* Multi-AZ deployment using AWS VPC and subnets
+* Application Load Balancer for traffic distribution
+* Containerized application deployment using Docker
+* Automated CI/CD pipeline using GitHub Actions
+* SSH-based remote deployment to EC2 instances
+
+---
+
+## 📁 Project Structure
+
+```
+aws-devops-ci-cd-pipeline/
+│
+├── app/
+│   ├── Dockerfile
+│   └── index.html
+│
+├── infra/
+│   ├── main.tf
+│   └── provider.tf
+│
+├── .github/workflows/
+│   └── deploy.yml
+│
+├── .gitignore
+└── README.md
+```
 
 ---
 
 ## 🔄 CI/CD Workflow
 
 1. Developer pushes code to GitHub
-2. GitHub Actions pipeline triggers
-3. Pipeline connects to EC2 via SSH
-4. Pulls latest repository
-5. Builds Docker image
-6. Runs container on port 80
-7. Application updates automatically
+2. GitHub Actions pipeline is triggered
+3. Workflow connects to EC2 using SSH
+4. Existing container is stopped and removed
+5. New Docker image is built
+6. Container is deployed with updated version
 
 ---
 
-## 📁 Project Structure
+## 🌐 Deployment
 
-self-healing-canary-devops-aws/
+After deployment, the application is accessible via:
 
-├── app/
+```
+http://<ALB-DNS>
+```
 
-│   ├── Dockerfile
-
-│   └── index.html
-
-│
-
-├── infra/
-
-│   ├── main.tf
-
-│   └── provider.tf
-
-│
-
-├── .github/workflows/
-
-│   └── deploy.yml
-
-│
-
-└── .gitignore
+Refresh the page to observe responses from different instances.
 
 ---
 
 ## 🧪 How to Test
 
-1. Update `index.html`
-2. Push changes to GitHub
-3. Wait for GitHub Actions to run
-4. Access application via EC2 public IP
+1. Modify content in `app/index.html`
+2. Push changes to GitHub:
+
+```
+git add .
+git commit -m "update app"
+git push
+```
+
+3. GitHub Actions will automatically deploy changes
+4. Open ALB DNS and verify updates
 
 ---
 
-## 📈 Key Learning
+## 🔐 Security Note
 
-- End-to-end DevOps pipeline implementation
-- CI/CD automation
-- Docker-based deployments
-- Infrastructure as Code using Terraform
-- Debugging real-world pipeline failures
+* SSH private key is stored securely in GitHub Secrets
+* For production systems, IAM roles and secure access methods are recommended
 
 ---
 
-## 🔥 Future Improvements
+## 📌 Future Improvements
 
-- Auto Scaling (self-healing infrastructure)
-- CloudWatch monitoring & alerts
-- Blue-Green deployments
-- Kubernetes (EKS) integration
-- Docker image push to AWS ECR
+* Use AWS ECR for Docker image storage
+* Implement rolling or canary deployments
+* Add monitoring using CloudWatch
+* Replace SSH with SSM or IAM-based access
 
-## 🔥 Key Highlights
-
-- Automated CI/CD deployment (no manual steps)
-- Docker-based application deployment
-- Infrastructure provisioning using Terraform
-- Real-time update on every Git push
+---
 
 ## 👨‍💻 Author
 
-Akshay
+Akshay Anand
