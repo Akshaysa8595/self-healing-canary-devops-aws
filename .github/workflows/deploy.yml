@@ -20,8 +20,13 @@ jobs:
           username: ec2-user
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            cd app
-            docker stop $(docker ps -q) || true
-            docker rm $(docker ps -aq) || true
-            docker build -t my-app .
-            docker run -d -p 80:80 my-app
+  rm -rf self-healing-canary-devops-aws || true
+  git clone https://github.com/Akshaysa8595/self-healing-canary-devops-aws.git
+
+  cd self-healing-canary-devops-aws/app
+
+  docker stop $(docker ps -q) || true
+  docker rm $(docker ps -aq) || true
+
+  docker build -t my-app .
+  docker run -d -p 80:80 my-app
